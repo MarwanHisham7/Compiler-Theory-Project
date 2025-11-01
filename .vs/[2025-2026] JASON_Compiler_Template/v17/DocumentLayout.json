@@ -1,0 +1,170 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\JASON_Compiler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\JASON_Compiler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.Designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.Designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.Designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.Designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Errors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Errors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form2.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.Designer.cs",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.Designer.cs",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.Designer.cs",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T16:22:21.542Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.resx",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.resx",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.resx",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.resx",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-10-29T16:22:16.013Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.Designer.cs",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.Designer.cs",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.Designer.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T16:20:46.155Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Errors.cs",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Errors.cs",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Errors.cs",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Errors.cs",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Errors.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T16:20:42.925Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "JASON_Compiler.cs",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\JASON_Compiler.cs",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\JASON_Compiler.cs",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\JASON_Compiler.cs",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\JASON_Compiler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T15:11:12.666Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Program.cs",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Program.cs",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Program.cs",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T15:11:07.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Form2.cs",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.cs",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.cs",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.cs",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form2.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T15:09:37.767Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.cs",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.cs",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.cs",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Form1.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T15:07:58.925Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Scanner.cs",
+              "DocumentMoniker": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Scanner.cs",
+              "RelativeDocumentMoniker": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Scanner.cs",
+              "ToolTip": "C:\\Users\\GTX\\Desktop\\[2025-2026] JASON_Compiler_Template\\[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Scanner.cs",
+              "RelativeToolTip": "[2025-2026] JASON_Compiler_Template\\JASON_Compiler\\Scanner.cs",
+              "ViewState": "AgIAAJ8AAAAAAAAAAAA3wGwAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T14:37:19.359Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

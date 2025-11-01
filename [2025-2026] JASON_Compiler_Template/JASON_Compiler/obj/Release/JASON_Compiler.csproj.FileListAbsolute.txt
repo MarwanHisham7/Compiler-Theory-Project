@@ -1,0 +1,6 @@
+C:\Users\GTX\Desktop\compiler project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Release\JASON_Compiler.csproj.AssemblyReference.cache
+C:\Users\GTX\Desktop\compiler project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Release\JASON_Compiler.Form1.resources
+C:\Users\GTX\Desktop\compiler project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Release\JASON_Compiler.Form2.resources
+C:\Users\GTX\Desktop\compiler project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Release\JASON_Compiler.Properties.Resources.resources
+C:\Users\GTX\Desktop\compiler project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Release\JASON_Compiler.csproj.GenerateResource.cache
+C:\Users\GTX\Desktop\compiler project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Release\JASON_Compiler.csproj.CoreCompileInputs.cache

@@ -11,7 +11,7 @@ public enum Token_Class
     Parameters, Procedure, Program, Read, Real, Set, Then, Until, While, Write,
     Dot, Semicolon, Comma, LParanthesis, RParanthesis, EqualOp, LessThanOp,
     GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp,
-    Idenifier, Constant, INT,FLOAT,STRING,BOOL
+    Idenifier, Constant, Int,Float,String,Bool
 }
 namespace JASON_Compiler
 {
@@ -52,10 +52,10 @@ namespace JASON_Compiler
             ReservedWords.Add("UNTIL", Token_Class.Until);
             ReservedWords.Add("WHILE", Token_Class.While);
             ReservedWords.Add("WRITE", Token_Class.Write);
-            ReservedWords.Add("INT", Token_Class.INT);
-            ReservedWords.Add("FLOAT", Token_Class.FLOAT);
-            ReservedWords.Add("STRING", Token_Class.STRING);
-            ReservedWords.Add("BOOL", Token_Class.BOOL);
+            ReservedWords.Add("INT", Token_Class.Int);
+            ReservedWords.Add("FLOAT", Token_Class.Float);
+            ReservedWords.Add("STRING", Token_Class.String);
+            ReservedWords.Add("BOOL", Token_Class.Bool);
             ////////////////////////////////////
             Operators.Add(".", Token_Class.Dot);
             Operators.Add(";", Token_Class.Semicolon);
@@ -93,33 +93,6 @@ namespace JASON_Compiler
                 // ---------- TaskName ->> Identifiers or reserved Keywords ----------
                 // task1 -> menna ezzat
 
-              
-                if (char.IsDigit(CurrentChar))
-                {
-                    j = i;
-                    string value = "";
-
-                    while (j < SourceCode.Length && (char.IsDigit(SourceCode[j]) || SourceCode[j] == '.'))
-                    {
-                        value += SourceCode[j];
-                        j++;
-                    }
-
-                    if (value.Count(c => c == '.') > 1)
-                    {
-                        Errors.Error_List.Add($"Undefined Token: {value}");
-                    }
-                    else
-                    {
-                        Token Tok = new Token { lex = value, token_type = Token_Class.Constant };
-                        Tokens.Add(Tok);
-                    }
-
-                    i = j - 1;
-                    continue;
-                }
-
-                // Identifiers or Reserved words
                 if (char.IsLetter(CurrentChar) || CurrentChar == '_')
                 {
                     j = i;
@@ -130,7 +103,6 @@ namespace JASON_Compiler
                         value += SourceCode[j];
                         j++;
                     }
-
                     if (ReservedWords.ContainsKey(value.ToUpper()))
                     {
                         FindTokenClass(value);
@@ -148,8 +120,6 @@ namespace JASON_Compiler
                     i = j - 1;
                     continue;
                 }
-
-                // Invalid tokens like $x, 5s, @name
               
                 else if (!char.IsWhiteSpace(CurrentChar) && !Operators.ContainsKey(CurrentChar.ToString()) && CurrentChar != '"')
                 {
@@ -164,7 +134,6 @@ namespace JASON_Compiler
                         j++;
                     }
 
-                    
                     if (value.All(char.IsDigit))
                     {
                         Token Tok = new Token { lex = value, token_type = Token_Class.Constant };
@@ -180,12 +149,12 @@ namespace JASON_Compiler
                 }
 
 
-
-
                 // ----------TaskName ->>  Numbers ----------
                 //task2-> anas
+
                 else if (CurrentChar >= '0' && CurrentChar <= '9')
                 {
+                    CurrentLexeme += CurrentChar;  
                     j++;
                     if (j < SourceCode.Length)
                     {
@@ -201,8 +170,9 @@ namespace JASON_Compiler
                     }
 
                     FindTokenClass(CurrentLexeme);
-                    i = j-1;
+                    i = j - 1;
                 }
+
 
 
 
@@ -214,15 +184,27 @@ namespace JASON_Compiler
                     j = i + 1;
                     string value = "\"";
                     while (j < SourceCode.Length && SourceCode[j] != '"')
-                    { 
+                    {
+                
+                        if (SourceCode[j] == '\\' && j + 1 < SourceCode.Length)
+                        {
+                            value += SourceCode[j];    
+                            j++;
+                            value += SourceCode[j];    
+                            j++;
+                            continue;
+                        }
+
                         value += SourceCode[j];
                         j++;
                     }
+
                     if (j < SourceCode.Length && SourceCode[j] == '"')
                     {
                         value += "\"";
-                        i = j;
+                        i = j;             
                         FindTokenClass(value);
+                        continue;            
                     }
                     else
                     {
@@ -230,6 +212,7 @@ namespace JASON_Compiler
                         break;
                     }
                 }
+
 
                 // ---------- TaskName ->> Comments ----------
                 //task4-> yousef
@@ -292,13 +275,9 @@ namespace JASON_Compiler
                 }                
                 if(!opfound)
                     Errors.Error_List.Add($"Undefined Token: {CurrentChar}");        
-                ///////////////////////////////
-
-                foreach (var token in Tokens)
-                {
-                    Console.WriteLine($"{token.lex}  -->  {token.token_type}");
-                }
+             
             }
+           
 
             // ---------- Helper Methods ----------
             void FindTokenClass(string Lex)
@@ -309,17 +288,23 @@ namespace JASON_Compiler
                 if (ReservedWords.ContainsKey(Lex.ToUpper()))
                     Tok.token_type = ReservedWords[Lex.ToUpper()];
 
-
                 else if (Operators.ContainsKey(Lex))
+
                     Tok.token_type = Operators[Lex];
+
                 else if (isIdentifier(Lex))
+
                     Tok.token_type = Token_Class.Idenifier;
+
                 else if (isConstant(Lex))
+
                     Tok.token_type = Token_Class.Constant;
+
                 else if (Regex.IsMatch(Lex, "^\"([^\"\\\\]|\\\\.)*\"$"))
+
                     Tok.token_type = Token_Class.Constant;
-                else if (Regex.IsMatch(Lex, @"^/\*([^*]|\*+[^*/])*\*/$"))
-                    return;
+              
+
                 else
                 {
                     Errors.Error_List.Add($"Undefined Token: {Lex}");

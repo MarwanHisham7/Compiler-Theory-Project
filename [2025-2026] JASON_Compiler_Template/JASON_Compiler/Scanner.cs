@@ -92,11 +92,39 @@ namespace JASON_Compiler
                 string CurrentLexeme = "";
 
 
+                // ----------TaskName ->>  Numbers ----------
+                //task1-> anas
+
+                if (CurrentChar >= '0' && CurrentChar <= '9')
+                {
+                    CurrentLexeme += CurrentChar;
+                    j++;
+                    if (j < SourceCode.Length)
+                    {
+                        CurrentChar = SourceCode[j];
+                        while (char.IsDigit(CurrentChar) || CurrentChar == '.' || char.IsLetter(CurrentChar))
+                        {
+                            CurrentLexeme += CurrentChar.ToString();
+                            j++;
+                            if (j >= SourceCode.Length)
+                                break;
+                            CurrentChar = SourceCode[j];
+                        }
+                    }
+
+                    FindTokenClass(CurrentLexeme);
+                    i = j - 1;
+                    continue;
+                }
+
+
+
+
                 if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n' || CurrentChar == '\t')
                     continue;
 
                 // ---------- TaskName ->> Identifiers or reserved Keywords ----------
-                // task1 -> menna ezzat
+                // task2 -> menna ezzat
 
                 if (char.IsLetter(CurrentChar) || CurrentChar == '_')
                 {
@@ -152,32 +180,6 @@ namespace JASON_Compiler
                     i = j - 1;
                     continue;
                 }
-
-
-                // ----------TaskName ->>  Numbers ----------
-                //task2-> anas
-
-                else if (CurrentChar >= '0' && CurrentChar <= '9')
-                {
-                    CurrentLexeme += CurrentChar;  
-                    j++;
-                    if (j < SourceCode.Length)
-                    {
-                        CurrentChar = SourceCode[j];
-                        while (char.IsDigit(CurrentChar) || CurrentChar == '.' || char.IsLetter(CurrentChar))
-                        {
-                            CurrentLexeme += CurrentChar.ToString();
-                            j++;
-                            if (j >= SourceCode.Length)
-                                break;
-                            CurrentChar = SourceCode[j];
-                        }
-                    }
-
-                    FindTokenClass(CurrentLexeme);
-                    i = j - 1;
-                }
-
 
 
 
@@ -302,12 +304,16 @@ namespace JASON_Compiler
                     Tok.token_type = Token_Class.Idenifier;
 
                 else if (isConstant(Lex))
-
-                    Tok.token_type = Token_Class.Constant;
+                {
+                    if (Lex.Contains("."))  
+                        Tok.token_type = Token_Class.Float;
+                    else                     
+                        Tok.token_type = Token_Class.Int;
+                }
 
                 else if (Regex.IsMatch(Lex, "^\"([^\"\\\\]|\\\\.)*\"$"))
 
-                    Tok.token_type = Token_Class.Constant;
+                    Tok.token_type = Token_Class.String;
               
 
                 else
@@ -327,6 +333,7 @@ namespace JASON_Compiler
 
             bool isConstant(string lex)
             {
+
                 string pattern = @"^[0-9]+(\.[0-9]+)?$";
                 return Regex.IsMatch(lex, pattern);
             }

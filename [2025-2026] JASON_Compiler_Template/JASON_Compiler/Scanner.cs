@@ -56,7 +56,6 @@ namespace JASON_Compiler
             ReservedWords.Add("FLOAT", Token_Class.Float);
             ReservedWords.Add("STRING", Token_Class.String);
             ReservedWords.Add("BOOL", Token_Class.Bool);
-         ////////////
             ReservedWords.Add("AND", Token_Class.AndOp);
             ReservedWords.Add("OR", Token_Class.OrOp);
 
@@ -73,11 +72,8 @@ namespace JASON_Compiler
             Operators.Add("+", Token_Class.PlusOp);
             Operators.Add("-", Token_Class.MinusOp);
             Operators.Add("*", Token_Class.MultiplyOp);
-            Operators.Add("/", Token_Class.DivideOp);
-         
+            Operators.Add("/", Token_Class.DivideOp);        
             Operators.Add("<>", Token_Class.NotEqualOp);
-
-
         }
 
         public void StartScanning(string SourceCode)
@@ -274,6 +270,14 @@ namespace JASON_Compiler
                 {
                     if(op== Operators.Keys.ElementAt(m))
                     {
+                        if(CurrentChar=='<')
+                        {
+                            if(i+1 < SourceCode.Length && SourceCode[i+1]=='>' )
+                            {
+                                op="<>"; 
+                                i++;
+                            }
+                        }
                         Token optoken = new Token { lex = op, token_type = Operators[op] };
                         Tokens.Add(optoken);
                         opfound = true;

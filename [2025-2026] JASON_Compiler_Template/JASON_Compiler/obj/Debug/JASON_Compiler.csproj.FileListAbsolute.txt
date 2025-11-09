@@ -110,3 +110,15 @@ C:\Users\GTX\Desktop\menna\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Te
 C:\Users\GTX\Desktop\menna\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.csproj.CoreCompileInputs.cache
 C:\Users\GTX\Desktop\menna\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.exe
 C:\Users\GTX\Desktop\menna\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.pdb
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\bin\Debug\JASON_Compiler.exe.config
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\bin\Debug\JASON_Compiler.exe
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\bin\Debug\JASON_Compiler.pdb
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.csproj.AssemblyReference.cache
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.exe.config
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.Form1.resources
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.Form2.resources
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.Properties.Resources.resources
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.csproj.GenerateResource.cache
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.csproj.CoreCompileInputs.cache
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.exe
+D:\Compiler Project (4)\Compiler-Theory-Project\[2025-2026] JASON_Compiler_Template\JASON_Compiler\obj\Debug\JASON_Compiler.pdb

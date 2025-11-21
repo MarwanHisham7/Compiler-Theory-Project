@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
- 
+
 public enum Token_Class
 {
     Begin, Call, Declare, End, Do, Else, EndIf, EndUntil, EndWhile, If, Integer,
     Parameters, Procedure, Program, Read, Real, Set, Then, Until, While, Write,
-    Dot, Semicolon, Comma, LParanthesis, RParanthesis, EqualOp, LessThanOp,
+    Semicolon, Comma, LParanthesis, RParanthesis, EqualOp, LessThanOp,
     GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp,
-    Idenifier, Constant, Int,Float,String,Bool,AndOp, OrOp
+    Idenifier, Constant, Int, Float, String, Bool, AndOp, OrOp, And, Or, openBrac, closeBrac, Main, ColonEqual
 }
 namespace JASON_Compiler
 {
@@ -56,17 +56,17 @@ namespace JASON_Compiler
             ReservedWords.Add("FLOAT", Token_Class.Float);
             ReservedWords.Add("STRING", Token_Class.String);
             ReservedWords.Add("BOOL", Token_Class.Bool);
-         ////////////
-            ReservedWords.Add("AND", Token_Class.AndOp);
-            ReservedWords.Add("OR", Token_Class.OrOp);
+            ReservedWords.Add("MAIN", Token_Class.Main);
 
             ////////////////////////////////////
-            Operators.Add(".", Token_Class.Dot);
+
             Operators.Add(";", Token_Class.Semicolon);
             Operators.Add(",", Token_Class.Comma);
             Operators.Add("(", Token_Class.LParanthesis);
             Operators.Add(")", Token_Class.RParanthesis);
-            Operators.Add("=", Token_Class.EqualOp);
+            Operators.Add("{", Token_Class.openBrac);
+            Operators.Add("}", Token_Class.closeBrac);
+
             Operators.Add("<", Token_Class.LessThanOp);
             Operators.Add(">", Token_Class.GreaterThanOp);
             Operators.Add("!", Token_Class.NotEqualOp);
@@ -74,10 +74,14 @@ namespace JASON_Compiler
             Operators.Add("-", Token_Class.MinusOp);
             Operators.Add("*", Token_Class.MultiplyOp);
             Operators.Add("/", Token_Class.DivideOp);
-         
             Operators.Add("<>", Token_Class.NotEqualOp);
-
-
+            Operators.Add("&", Token_Class.And);
+            Operators.Add("&&", Token_Class.AndOp);
+            Operators.Add("|", Token_Class.Or);
+            Operators.Add("||", Token_Class.OrOp);
+            Operators.Add("=", Token_Class.EqualOp);
+            //Operators.Add(":", Token_Class.colon);
+            Operators.Add(":=", Token_Class.ColonEqual);
         }
 
         public void StartScanning(string SourceCode)
@@ -92,11 +96,69 @@ namespace JASON_Compiler
                 string CurrentLexeme = "";
 
 
+                // ----------TaskName ->>  Numbers ----------
+                //task1-> anas
+
+                if (char.IsDigit(CurrentChar))
+                {
+                    j = i;
+                    string CurrentLexem = "";
+
+                    if (CurrentChar == '+' || CurrentChar == '-')
+                    {
+                        CurrentLexeme += CurrentChar; // Add the sign
+                        j++; // Move to next char after the sign
+
+                        // Check if next character is actually a digit (to make it a valid signed number)
+                        if (j >= SourceCode.Length || !char.IsDigit(SourceCode[j]))
+                        {
+                            Errors.Error_List.Add($"Undefined Token: {CurrentLexeme}");
+                            continue;
+                        }
+                    }
+
+                    while (j < SourceCode.Length && (char.IsDigit(SourceCode[j]) || SourceCode[j] == '.'))
+                    {
+                        CurrentLexeme += SourceCode[j];
+                        j++;
+                    }
+                    if (CurrentChar == '+' || CurrentChar == '-')
+                    {
+                        CurrentLexeme += CurrentChar;
+                        j++;
+                    }
+
+                    // Check for invalid float with multiple dots
+                    if (CurrentLexeme.Count(c => c == '.') > 1)
+                    {
+                        Errors.Error_List.Add($"Undefined Token: {CurrentLexeme}");
+                    }
+
+                    else if (j < SourceCode.Length && char.IsLetter(SourceCode[j]))
+                    {
+                      
+                        while (j < SourceCode.Length && !char.IsWhiteSpace(SourceCode[j]) && !Operators.ContainsKey(SourceCode[j].ToString()))
+                        {
+                            CurrentLexeme += SourceCode[j];
+                            j++;
+                        }
+                        Errors.Error_List.Add($"Undefined Token: {CurrentLexeme}");
+                    }
+                    else
+                    {
+                        Token Tok = new Token { lex = CurrentLexeme, token_type = Token_Class.Constant };
+                        Tokens.Add(Tok);
+                    }
+
+                    i = j - 1;
+                    continue;
+                }
+
                 if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n' || CurrentChar == '\t')
                     continue;
 
                 // ---------- TaskName ->> Identifiers or reserved Keywords ----------
-                // task1 -> menna ezzat
+                // task2 -> menna ezzat
 
                 if (char.IsLetter(CurrentChar) || CurrentChar == '_')
                 {
@@ -125,15 +187,16 @@ namespace JASON_Compiler
                     i = j - 1;
                     continue;
                 }
-              
-                else if (!char.IsWhiteSpace(CurrentChar) && !Operators.ContainsKey(CurrentChar.ToString()) && CurrentChar != '"')
+
+                else if (!char.IsWhiteSpace(CurrentChar) && !Operators.ContainsKey(CurrentChar.ToString()) && CurrentChar != '"' && CurrentChar != ':')
                 {
                     j = i;
                     string value = "";
 
                     while (j < SourceCode.Length &&
                            !char.IsWhiteSpace(SourceCode[j]) &&
-                           !Operators.ContainsKey(SourceCode[j].ToString()))
+                           !Operators.ContainsKey(SourceCode[j].ToString()) &&
+                           SourceCode[j] != ':')
                     {
                         value += SourceCode[j];
                         j++;
@@ -154,32 +217,6 @@ namespace JASON_Compiler
                 }
 
 
-                // ----------TaskName ->>  Numbers ----------
-                //task2-> anas
-
-                else if (CurrentChar >= '0' && CurrentChar <= '9')
-                {
-                    CurrentLexeme += CurrentChar;  
-                    j++;
-                    if (j < SourceCode.Length)
-                    {
-                        CurrentChar = SourceCode[j];
-                        while (char.IsDigit(CurrentChar) || CurrentChar == '.' || char.IsLetter(CurrentChar))
-                        {
-                            CurrentLexeme += CurrentChar.ToString();
-                            j++;
-                            if (j >= SourceCode.Length)
-                                break;
-                            CurrentChar = SourceCode[j];
-                        }
-                    }
-
-                    FindTokenClass(CurrentLexeme);
-                    i = j - 1;
-                }
-
-
-
 
                 // ---------- TaskName ->> Strings ----------
                 //task3 -> malak
@@ -190,12 +227,12 @@ namespace JASON_Compiler
                     string value = "\"";
                     while (j < SourceCode.Length && SourceCode[j] != '"')
                     {
-                
+
                         if (SourceCode[j] == '\\' && j + 1 < SourceCode.Length)
                         {
-                            value += SourceCode[j];    
+                            value += SourceCode[j];
                             j++;
-                            value += SourceCode[j];    
+                            value += SourceCode[j];
                             j++;
                             continue;
                         }
@@ -207,9 +244,9 @@ namespace JASON_Compiler
                     if (j < SourceCode.Length && SourceCode[j] == '"')
                     {
                         value += "\"";
-                        i = j;             
+                        i = j;
                         FindTokenClass(value);
-                        continue;            
+                        continue;
                     }
                     else
                     {
@@ -265,24 +302,96 @@ namespace JASON_Compiler
 
                 // ----------  TaskName ->> Operators ----------
                 //task5-> marwan
-
                 string op = CurrentChar.ToString();
-                bool opfound=false;
-                for(int m=0;m<Operators.Count;m++)
+                bool opfound = false;
+                if (CurrentChar == '<')
                 {
-                    if(op== Operators.Keys.ElementAt(m))
+                    if (i + 1 < SourceCode.Length && SourceCode[i + 1] == '>')
                     {
-                        Token optoken = new Token { lex = op, token_type = Operators[op] };
-                        Tokens.Add(optoken);
                         opfound = true;
-                        break;
+                        op = "<>";
+                        i++;
                     }
-                }                
-                if(!opfound)
-                    Errors.Error_List.Add($"Undefined Token: {CurrentChar}");        
-             
+                }
+                if (CurrentChar == '&')
+                {
+                    if (i + 1 < SourceCode.Length && SourceCode[i + 1] == '&')
+                    {
+                        opfound = true;
+                        op = "&&";
+                        i++;
+                    }
+                }
+                if (CurrentChar == '|')
+                {
+                    if (i + 1 < SourceCode.Length && SourceCode[i + 1] == '|')
+                    {
+                        opfound = true;
+                        op = "||";
+                        i++;
+                    }
+                }
+
+                if (CurrentChar == '=')
+                {
+                    if (i + 1 < SourceCode.Length && SourceCode[i + 1] == '=')
+                    {
+                        opfound = true;
+                        op = "==";
+                        i++;
+                    }
+                }
+
+
+                if (CurrentChar == ':')
+                {
+                    if (i + 1 < SourceCode.Length && SourceCode[i + 1] == '=')
+                    {
+                        opfound = true;
+                        op = ":=";
+                        i++;
+                    }
+                    else
+                    {
+                        
+                        Errors.Error_List.Add($"Undefined Token: {CurrentChar}");
+                        continue;
+                    }
+                }
+
+
+
+                if (Operators.ContainsKey(op))
+                {
+                    opfound = true;
+                    if ((op == "&" || op == "|"))
+                    { opfound = false; }
+                }
+
+
+                if (opfound)
+                {
+                    if (Operators.TryGetValue(op, out Token_Class opType))
+                    {
+                        Token optoken = new Token { lex = op, token_type = opType };
+                        Tokens.Add(optoken);
+
+                    }
+
+
+                }
+
+
+                else
+                {
+                    Errors.Error_List.Add($"Undefined Token: {CurrentChar}");
+
+                    continue;
+                }
+                ///////////////////////////////////////////////
+
             }
-           
+
 
             // ---------- Helper Methods ----------
             void FindTokenClass(string Lex)
@@ -302,13 +411,17 @@ namespace JASON_Compiler
                     Tok.token_type = Token_Class.Idenifier;
 
                 else if (isConstant(Lex))
-
-                    Tok.token_type = Token_Class.Constant;
+                {
+                    if (Lex.Contains("."))
+                        Tok.token_type = Token_Class.Float;
+                    else
+                        Tok.token_type = Token_Class.Int;
+                }
 
                 else if (Regex.IsMatch(Lex, "^\"([^\"\\\\]|\\\\.)*\"$"))
 
-                    Tok.token_type = Token_Class.Constant;
-              
+                    Tok.token_type = Token_Class.String;
+
 
                 else
                 {
@@ -327,6 +440,7 @@ namespace JASON_Compiler
 
             bool isConstant(string lex)
             {
+
                 string pattern = @"^[0-9]+(\.[0-9]+)?$";
                 return Regex.IsMatch(lex, pattern);
             }

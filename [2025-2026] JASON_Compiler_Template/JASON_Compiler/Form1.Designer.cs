@@ -28,7 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            //this.textBox1 = new System.Windows.Forms.TextBox();
+            //new
+            this.textBox1 = new System.Windows.Forms.RichTextBox();
+
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -156,7 +159,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        //private System.Windows.Forms.TextBox textBox1;
+        // for gui syntax highlight
+        private System.Windows.Forms.RichTextBox textBox1;
+
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView1;

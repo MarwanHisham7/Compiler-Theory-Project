@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace JASON_Compiler
 {
@@ -15,6 +16,8 @@ namespace JASON_Compiler
         public Form1()
         {
             InitializeComponent();
+            textBox1.TextChanged += TextBox1_TextChanged;
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -64,6 +67,8 @@ namespace JASON_Compiler
         {
 
         }
+
+
         /*  void PrintLexemes()
 {
 for (int i = 0; i < JASON_Compiler.Lexemes.Count; i++)
@@ -72,5 +77,48 @@ textBox2.Text += JASON_Compiler.Lexemes.ElementAt(i);
 textBox2.Text += Environment.NewLine;
 }
 }*/
+
+       ////////////////// // for gui
+            private void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+            int selectionStart = textBox1.SelectionStart;
+            int selectionLength = textBox1.SelectionLength;
+
+            textBox1.SelectAll();
+            textBox1.SelectionColor = Color.Black;
+
+          
+            HighlightWords(new string[] { "int", "float", "bool", "string", "if", "else", "while", "do", "begin", "end" }, Color.Blue);
+            // for Numbers
+            HighlightPattern(@"\b\d+(\.\d+)?\b", Color.Purple);
+            //for  Strings
+            HighlightPattern("\".*?\"", Color.Green);
+            //  for Comments
+            HighlightPattern(@"/\*.*?\*/", Color.Gray);
+
+            textBox1.SelectionStart = selectionStart;
+            textBox1.SelectionLength = selectionLength;
+            textBox1.SelectionColor = Color.Black;
+        }
+
+        private void HighlightWords(string[] words, Color color)
+        {
+            foreach (string word in words)
+            {
+                HighlightPattern($@"\b{word}\b", color);
+            }
+        }
+
+        private void HighlightPattern(string pattern, Color color)
+        {
+            var matches = Regex.Matches(textBox1.Text, pattern, RegexOptions.Singleline);
+            foreach (Match m in matches)
+            {
+                textBox1.Select(m.Index, m.Length);
+                textBox1.SelectionColor = color;
+            }
+        }
+
+
     }
 }

@@ -104,13 +104,102 @@ namespace JASON_Compiler
             return stringNode;
         }
 
+        // Rule 3: Reserved Keywords
+        Node ReservedKeyWord()
+        {
+            if (InputPointer >= TokenStream.Count)
+                return null;
+
+            Token_Class ct = TokenStream[InputPointer].token_type;
+            Node n = null;
+
+            switch (ct)
+            {
+                case Token_Class.Int:
+                    n = new Node("int");
+                    n.Children.Add(match(Token_Class.Int));
+                    break;
+                case Token_Class.Float:
+                    n = new Node("float");
+                    n.Children.Add(match(Token_Class.Float));
+                    break;
+                case Token_Class.String:
+                    n = new Node("string");
+                    n.Children.Add(match(Token_Class.String));
+                    break;
+                case Token_Class.Read:
+                    n = new Node("read");
+                    n.Children.Add(match(Token_Class.Read));
+                    break;
+                case Token_Class.Write:
+                    n = new Node("write");
+                    n.Children.Add(match(Token_Class.Write));
+                    break;
+                case Token_Class.Repeat:
+                    n = new Node("repeat");
+                    n.Children.Add(match(Token_Class.Repeat));
+                    break;
+                case Token_Class.Until:
+                    n = new Node("until");
+                    n.Children.Add(match(Token_Class.Until));
+                    break;
+                case Token_Class.If:
+                    n = new Node("if");
+                    n.Children.Add(match(Token_Class.If));
+                    break;
+                case Token_Class.ElseIf:
+                    n = new Node("elseif");
+                    n.Children.Add(match(Token_Class.ElseIf));
+                    break;
+                case Token_Class.Else:
+                    n = new Node("else");
+                    n.Children.Add(match(Token_Class.Else));
+                    break;
+                case Token_Class.Then:
+                    n = new Node("then");
+                    n.Children.Add(match(Token_Class.Then));
+                    break;
+                case Token_Class.Return:
+                    n = new Node("return");
+                    n.Children.Add(match(Token_Class.Return));
+                    break;
+                case Token_Class.Endl:
+                    n = new Node("endl");
+                    n.Children.Add(match(Token_Class.Endl));
+                    break;
+                default:
+                    return null;
+            }
+            return n;
+        }
+
         // Rule 4: Comment_Statement
-        
+
         Node Comment_Statement()
         {
             Node comment = new Node("Comment_Statement");
 
             return comment;
+        }
+
+        //Rule 5: Identifiers
+        Node Identifier()
+        {
+            Node id = new Node("Identifier");
+            if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.Idenifier)
+            {
+                id.Children.Add(match(Token_Class.Idenifier));
+            }
+            else
+            {
+                Errors.Error_List.Add("Parsing Error: Expected Identifier");
+            }
+            return id;
+        }
+        Node Identifier_Tail()
+        {
+            Node tail = new Node("Identifier_Tail");
+            return tail;
         }
 
         // Rule 8: Arithmetic_Operator
@@ -224,20 +313,78 @@ namespace JASON_Compiler
             return conditionOp;
         }
 
-        // Helper method to check if current token is a condition operator
-        bool IsConditionOperator()
+        // Rule 19: Boolean Operator
+        Node Boolean_Operator()
+        {
+            Node boolOp = new Node("Boolean_Operator");
+
+            if (InputPointer < TokenStream.Count)
+            {
+                Token_Class currentToken = TokenStream[InputPointer].token_type;
+
+                if (currentToken == Token_Class.AndOp)
+                {
+                    boolOp.Children.Add(match(Token_Class.AndOp));
+                }
+                else if (currentToken == Token_Class.OrOp)
+                {
+                    boolOp.Children.Add(match(Token_Class.OrOp));
+                }
+            }
+
+            return boolOp;
+        }
+
+        // Helper method to check if current token is a boolean operator
+        bool IsBooleanOperator()
         {
             if (InputPointer >= TokenStream.Count)
                 return false;
 
             Token_Class currentToken = TokenStream[InputPointer].token_type;
-            return currentToken == Token_Class.LessThanOp ||
-                   currentToken == Token_Class.GreaterThanOp ||
-                   currentToken == Token_Class.EqualOp ||
-                   currentToken == Token_Class.NotEqualOp;
+            return currentToken == Token_Class.AndOp ||
+                   currentToken == Token_Class.OrOp;
         }
 
-       
+        // Rule 25: Function Name
+        Node FunctionName()
+        {
+            Node fn = new Node("FunctionName");
+            if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.Idenifier)
+            {
+                fn.Children.Add(Identifier());
+            }
+            else
+            {
+                Errors.Error_List.Add("Parsing Error: Expected Function Name (Identifier)");
+            }
+            return fn;
+        }
+
+        // Rule 26: Parameter
+        Node Parameter()
+        {
+            Node param = new Node("Parameter");
+            if (IsDatatype())
+            {
+                param.Children.Add(Datatype());
+            }
+            else
+            {
+                Errors.Error_List.Add("Parsing Error: Expected datatype in parameter");
+                return param;
+            }
+            if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.Idenifier)
+            {
+                param.Children.Add(Identifier());
+            }
+            else
+            {
+                Errors.Error_List.Add("Parsing Error: Expected identifier in parameter");
+            }
+            return param;
+        }
+
         // Implement your logic here
         public Node match(Token_Class ExpectedToken)
         {

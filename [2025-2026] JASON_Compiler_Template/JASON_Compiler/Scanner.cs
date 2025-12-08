@@ -11,7 +11,7 @@ public enum Token_Class
     Parameters, Procedure, Program, Read, Real, Set, Then, Until, While, Write,
     Semicolon, Comma, LParanthesis, RParanthesis, EqualOp, LessThanOp,
     GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp,
-    Idenifier, Constant, Int, Float, String, Bool, AndOp, OrOp, And, Or, openBrac, closeBrac, Main, ColonEqual,Dot
+    Idenifier, Constant, Int, Float, String, Bool, AndOp, OrOp, And, Or, openBrac, closeBrac, Main, ColonEqual, Repeat, ElseIf, Return, Endl, Dot
 }
 namespace JASON_Compiler
 {
@@ -57,7 +57,10 @@ namespace JASON_Compiler
             ReservedWords.Add("STRING", Token_Class.String);
             ReservedWords.Add("BOOL", Token_Class.Bool);
             ReservedWords.Add("MAIN", Token_Class.Main);
-
+            ReservedWords.Add("REPEAT", Token_Class.Repeat);
+            ReservedWords.Add("ELSEIF", Token_Class.ElseIf);
+            ReservedWords.Add("RETURN", Token_Class.Return);
+            ReservedWords.Add("ENDL", Token_Class.Endl);
             ////////////////////////////////////
 
             Operators.Add(";", Token_Class.Semicolon);

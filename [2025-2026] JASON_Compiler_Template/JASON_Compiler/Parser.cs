@@ -201,6 +201,53 @@ namespace JASON_Compiler
             Node tail = new Node("Identifier_Tail");
             return tail;
         }
+        //Rule 7: term
+        public Node Term()
+        {
+            //Term → number | identifier | function_call
+            Node term = new Node("Term");
+            if (InputPointer < TokenStream.Count)
+            {
+                //if (TokenStream[InputPointer].token_type == Token_Class.Digit)
+                //{
+                //    term.Children.Add(match(Token_Class.Digit));
+                //    return term;
+                //}
+                if (TokenStream[InputPointer].token_type == Token_Class.Number)
+                {
+
+
+                    term.Children.Add(match(Token_Class.Number));
+                    return term;
+                }
+
+                else if (TokenStream[InputPointer].token_type == Token_Class.Identifier) //AMBUGUITY
+                {
+                    ++InputPointer;
+                    if (InputPointer < TokenStream.Count)
+                    {
+                        if (TokenStream[InputPointer].token_type == Token_Class.left_parenthesis)
+                        {
+                            --InputPointer;
+                            term.Children.Add(Function_Call());
+                            return term;
+                        }
+                    }
+
+                    --InputPointer;
+                    term.Children.Add(match(Token_Class.Identifier));
+                    return term;
+
+                }
+                else
+                {
+                    printError("Term");
+                }
+            }
+
+            return term;
+
+        }
 
         // Rule 8: Arithmetic_Operator
         Node Arithmetic_Operator()
@@ -243,6 +290,103 @@ namespace JASON_Compiler
                    currentToken == Token_Class.MinusOp ||
                    currentToken == Token_Class.MultiplyOp ||
                    currentToken == Token_Class.DivideOp;
+        }
+
+        // Rule 10: expression
+        public Node Expression()  //Expression → string | Term | Equation 
+        {
+            Node expression = new Node("Expression");
+
+            if (InputPointer < TokenStream.Count)
+            {
+                bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
+                bool isNumber = (TokenStream[InputPointer].token_type == Token_Class.Number);
+                bool isIdnetifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
+                //bool isDigit = (TokenStream[InputPointer].token_type == Token_Class.Digit);
+
+                if (isString)
+                {
+                    expression.Children.Add(match(Token_Class.String));
+                    return expression;
+                }
+                if (isNumber || isIdnetifier) //term or equation
+                {
+                    ++InputPointer;
+                    if (InputPointer < TokenStream.Count)
+                    {
+                        bool isPlusOp = (TokenStream[InputPointer].token_type == Token_Class.PlusOp);
+                        bool isMinusOp = (TokenStream[InputPointer].token_type == Token_Class.MinusOp);
+                        bool isMultiplyOp = (TokenStream[InputPointer].token_type == Token_Class.MultiplyOp);
+                        bool isDivideOp = (TokenStream[InputPointer].token_type == Token_Class.DivideOp);
+
+                        if (isPlusOp || isMinusOp || isMultiplyOp || isDivideOp)
+                        {
+                            --InputPointer;
+                            expression.Children.Add(Equation());
+                            return expression;
+                        }
+                    }
+                    --InputPointer;
+                    expression.Children.Add(Term());
+                    return expression;
+                }
+                else
+                    printError("Expression");
+
+            }
+            return expression;
+        }
+
+        // Rule 9: Equation
+        Node Equation()
+        {
+            Node equation = new Node("Equation");
+            if (InputPointer < TokenStream.Count)
+            {
+                if (TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
+                {
+                    equation.Children.Add(match(Token_Class.LParanthesis));
+                    equation.Children.Add(Equation());
+                    equation.Children.Add(match(Token_Class.RParanthesis));
+                }
+                else
+                {
+                    equation.Children.Add(Term());
+                    equation.Children.Add(Equation_Tail());
+                }
+            }
+            return equation;
+        }
+
+        Node Equation_Tail()
+        {
+            Node equationTail = new Node("Equation_Tail");
+            if (IsArithmeticOperator())
+            {
+                equationTail.Children.Add(Arithmetic_Operator());
+                if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
+                {
+                    equationTail.Children.Add(match(Token_Class.LParanthesis));
+                    equationTail.Children.Add(Equation());
+                    equationTail.Children.Add(match(Token_Class.RParanthesis));
+                }
+                else
+                {
+                    equationTail.Children.Add(Term());
+                    equationTail.Children.Add(Equation_Tail());
+                }
+            }
+            return equationTail;
+        }
+        // Rule 11: assign statement
+        public Node Assign_stmt()  
+        {
+            Node ass_stmt = new Node("Assigment stmt");
+
+            ass_stmt.Children.Add(match(Token_Class.Identifier));
+            ass_stmt.Children.Add(match(Token_Class.AssignmentOp));
+            ass_stmt.Children.Add(Expression());
+            return ass_stmt;
         }
 
         // Rule 12: Datatype 
@@ -311,6 +455,16 @@ namespace JASON_Compiler
             }
 
             return conditionOp;
+        }
+        // Rule 18: condition
+        public Node Condition() 
+        {
+            Node cond = new Node("Condition");
+            cond.Children.Add(match(Token_Class.Identifier));
+            cond.Children.Add(Condition_Op());
+            cond.Children.Add(Term());
+            return cond;
+
         }
 
         // Rule 19: Boolean Operator

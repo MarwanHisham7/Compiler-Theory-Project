@@ -201,6 +201,55 @@ namespace JASON_Compiler
             Node tail = new Node("Identifier_Tail");
             return tail;
         }
+        // Rule 6: Function Call
+        Node Function_Call()
+        {
+            Node fun_call = new Node("Function_Call");
+
+
+            fun_call.Children.Add(match(Token_Class.Idenifier));
+
+
+            fun_call.Children.Add(match(Token_Class.left_parenthesis));
+
+
+            fun_call.Children.Add(Argument_List());
+
+
+            fun_call.Children.Add(match(Token_Class.right_parenthesis));
+
+            return fun_call;
+        }
+
+        Node Argument_List()
+        {
+            Node argu = new Node("Argument_List");
+
+            
+            if (TokenStream[InputPointer].token_type == Token_Class.right_parenthesis)
+                return argu;
+
+            argu.Children.Add(Expression());
+
+            argu.Children.Add(Argument_Tail());
+
+            return argu;
+        }
+
+        Node Argument_Tail()
+        {
+            Node tail = new Node("Argument_Tail");
+
+            if (TokenStream[InputPointer].token_type == Token_Class.Comma)
+            {
+                tail.Children.Add(match(Token_Class.Comma));
+                tail.Children.Add(Expression());
+                tail.Children.Add(Argument_Tail());
+            }
+
+            return tail;
+        }
+
         //Rule 7: term
         public Node Term()
         {
@@ -291,7 +340,47 @@ namespace JASON_Compiler
                    currentToken == Token_Class.MultiplyOp ||
                    currentToken == Token_Class.DivideOp;
         }
+        // Rule 9: Equation
+        Node Equation()
+        {
+            Node equation = new Node("Equation");
+            if (InputPointer < TokenStream.Count)
+            {
+                if (TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
+                {
+                    equation.Children.Add(match(Token_Class.LParanthesis));
+                    equation.Children.Add(Equation());
+                    equation.Children.Add(match(Token_Class.RParanthesis));
+                }
+                else
+                {
+                    equation.Children.Add(Term());
+                    equation.Children.Add(Equation_Tail());
+                }
+            }
+            return equation;
+        }
 
+        Node Equation_Tail()
+        {
+            Node equationTail = new Node("Equation_Tail");
+            if (IsArithmeticOperator())
+            {
+                equationTail.Children.Add(Arithmetic_Operator());
+                if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
+                {
+                    equationTail.Children.Add(match(Token_Class.LParanthesis));
+                    equationTail.Children.Add(Equation());
+                    equationTail.Children.Add(match(Token_Class.RParanthesis));
+                }
+                else
+                {
+                    equationTail.Children.Add(Term());
+                    equationTail.Children.Add(Equation_Tail());
+                }
+            }
+            return equationTail;
+        }
         // Rule 10: expression
         public Node Expression()  //Expression → string | Term | Equation 
         {
@@ -336,48 +425,6 @@ namespace JASON_Compiler
             }
             return expression;
         }
-
-        // Rule 9: Equation
-        Node Equation()
-        {
-            Node equation = new Node("Equation");
-            if (InputPointer < TokenStream.Count)
-            {
-                if (TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
-                {
-                    equation.Children.Add(match(Token_Class.LParanthesis));
-                    equation.Children.Add(Equation());
-                    equation.Children.Add(match(Token_Class.RParanthesis));
-                }
-                else
-                {
-                    equation.Children.Add(Term());
-                    equation.Children.Add(Equation_Tail());
-                }
-            }
-            return equation;
-        }
-
-        Node Equation_Tail()
-        {
-            Node equationTail = new Node("Equation_Tail");
-            if (IsArithmeticOperator())
-            {
-                equationTail.Children.Add(Arithmetic_Operator());
-                if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
-                {
-                    equationTail.Children.Add(match(Token_Class.LParanthesis));
-                    equationTail.Children.Add(Equation());
-                    equationTail.Children.Add(match(Token_Class.RParanthesis));
-                }
-                else
-                {
-                    equationTail.Children.Add(Term());
-                    equationTail.Children.Add(Equation_Tail());
-                }
-            }
-            return equationTail;
-        }
         // Rule 11: assign statement
         public Node Assign_stmt()  
         {
@@ -414,6 +461,112 @@ namespace JASON_Compiler
 
             return datatype;
         }
+
+        // Rule 13: Declaration_Statement
+        Node Declaration_Statement()
+        {
+            Node decl = new Node("Declaration_Statement");
+
+            decl.Children.Add(Datatype());
+            decl.Children.Add(Identifier_List());
+            decl.Children.Add(match(Token_Class.Semicolon));
+
+            return decl;
+        }
+
+        Node Identifier_List()
+        {
+            Node list = new Node("Identifier_List");
+
+            list.Children.Add(Identifier_Item());
+            list.Children.Add(Identifier_List_Tail());
+
+            return list;
+        }
+
+        Node Identifier_List_Tail()
+        {
+            Node tail = new Node("Identifier_List_Tail");
+
+            if (TokenStream[InputPointer].token_type == Token_Class.Comma)
+            {
+                tail.Children.Add(match(Token_Class.Comma));
+                tail.Children.Add(Identifier_Item());
+                tail.Children.Add(Identifier_List_Tail());
+            }
+
+            return tail;
+        }
+
+        Node Identifier_Item()
+        {
+            Node item = new Node("Identifier_Item");
+
+            item.Children.Add(match(Token_Class.Idenifier));
+            item.Children.Add(Assignment_Opt());
+
+            return item;
+        }
+
+        Node Assignment_Opt()
+        {
+            Node opt = new Node("Assignment_Opt");
+
+            if (TokenStream[InputPointer].token_type == Token_Class.AssignmentOp)
+            {
+                opt.Children.Add(match(Token_Class.AssignmentOp));
+                opt.Children.Add(Expression());
+            }
+
+            return opt;
+        }
+
+        // Rule 14: Write Statement
+        Node Write_Statement()
+        {
+            Node w = new Node("Write_Statement");
+
+            w.Children.Add(match(Token_Class.Write));
+            w.Children.Add(Write_Content());
+            w.Children.Add(match(Token_Class.Semicolon));
+
+            return w;
+        }
+
+        Node Write_Content()
+        {
+            Node content = new Node("Write_Content");
+
+            if (TokenStream[InputPointer].token_type == Token_Class.Endl)
+                content.Children.Add(match(Token_Class.Endl));
+            else
+                content.Children.Add(Expression());
+
+            return content;
+        }
+        // Rule 15: Read Statement
+        Node Read_Statement()
+        {
+            Node r = new Node("Read_Statement");
+
+            r.Children.Add(match(Token_Class.Read));
+            r.Children.Add(match(Token_Class.Idenifier));
+            r.Children.Add(match(Token_Class.Semicolon));
+
+            return r;
+        }
+        // Rule 16: Return Statement
+        Node Return_Statement()
+        {
+            Node ret = new Node("Return_Statement");
+
+            ret.Children.Add(match(Token_Class.Return));
+            ret.Children.Add(Expression());
+            ret.Children.Add(match(Token_Class.Semicolon));
+
+            return ret;
+        }
+
 
         // Helper method to check if current token is a datatype
         bool IsDatatype()

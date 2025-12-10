@@ -41,16 +41,31 @@ namespace JASON_Compiler
             root.Children.Add(Program());
             return root;
         }
+
+        //rule 31
         Node Program()
         {
             Node program = new Node("Program");
-            program.Children.Add(Header());
-            program.Children.Add(DeclSec());
-            program.Children.Add(Block());
-            program.Children.Add(match(Token_Class.Dot));
+
+            program.Children.Add(Function_list());
+            program.Children.Add(Main_Function());
+
             MessageBox.Show("Success");
-            return program;
+            return program; ;
         }
+
+        Node Function_list()
+        {
+            Node list = new Node("Function_List");
+            if (TokenStream[InputPointer].token_type == Token_Class.Main)
+                return list;
+
+            list.Children.Add(Function_statement());
+            list.Children.Add(Function_list());
+            return list;
+        }
+
+
         Node Header()
         {
             Node header = new Node("Header");
@@ -68,12 +83,115 @@ namespace JASON_Compiler
         {
             Node block = new Node("block");
             // write your code here to match statements
+
+            //block.Children.Add(match(Token_Class.Begin));
+            block.Children.Add(Statements());
+            //block.Children.Add(match(Token_Class.End));
+
             return block;
         }
 
-        
-      
- 
+        Node Statements()
+        {
+            Node s =new Node("Statements");
+            if (InputPointer >= TokenStream.Count || TokenStream[InputPointer].token_type == Token_Class.End || TokenStream[InputPointer].token_type == Token_Class.ElseIf  || TokenStream[InputPointer].token_type == Token_Class.Else ||
+                TokenStream[InputPointer].token_type == Token_Class.Until)
+            {
+                return s;
+            }
+
+            s.Children.Add(Statement());
+            s.Children.Add(Statements());
+            return s;
+        }
+
+        Node Statement()
+        {
+            Node s = new Node("Statement");
+            if (InputPointer >= TokenStream.Count)
+                return s;
+
+            Token_Class ct = TokenStream[InputPointer].token_type;
+
+            switch (ct)
+            {
+                case Token_Class.Int:
+                case Token_Class.Float:
+                case Token_Class.String:
+                    s.Children.Add(Declaration_Statement());
+                    break;
+
+                // Assignment or Function Call (start with identifier)
+                case Token_Class.Idenifier:
+                    s.Children.Add(Statement_Start_With_Id());
+                    break;
+
+                // Read
+                case Token_Class.Read:
+                    s.Children.Add(Read_Statement());
+                    break;
+
+                // Write
+                case Token_Class.Write:
+                    s.Children.Add(Write_Statement());
+                    break;
+
+                // Return
+                case Token_Class.Return:
+                    s.Children.Add(Return_Statement());
+                    break;
+
+                // If
+                case Token_Class.If:
+                    s.Children.Add(IfStatement());
+                    break;
+
+                // Repeat
+                case Token_Class.Repeat:
+                    s.Children.Add(RepeatStatement());
+                    break;
+
+                default:
+                    Errors.Error_List.Add($"Parsing Error: Unexpected token in Statement: {ct}");
+                    InputPointer++;
+                    break;
+            }
+
+            return s;
+
+        }
+
+
+        Node Statement_Start_With_Id()
+        {
+            Node stmt = new Node("ID_Statement");
+
+            int lookahead = InputPointer + 1;
+
+            if (lookahead < TokenStream.Count &&
+                TokenStream[lookahead].token_type == Token_Class.AssignmentOp)
+            {
+                stmt.Children.Add(Assign_stmt());
+                stmt.Children.Add(match(Token_Class.Semicolon));
+            }
+            else if (lookahead < TokenStream.Count &&
+                     TokenStream[lookahead].token_type == Token_Class.left_parenthesis)
+            {
+                stmt.Children.Add(Function_Call());
+                stmt.Children.Add(match(Token_Class.Semicolon));
+            }
+            else
+            {
+                Errors.Error_List.Add("Parsing Error: Invalid identifier-based statement");
+                InputPointer++;
+            }
+
+            return stmt;
+        }
+
+
+
+
 
         // Rule 1: Number 
         Node Number()
@@ -785,6 +903,98 @@ namespace JASON_Compiler
             }
             return param;
         }
+
+
+        //Rule 27: function declare
+        Node Function_Declaration()
+        {
+            Node func = new Node("Function Declaration");
+            func.Children.Add(Datatype());
+            func.Children.Add(FunctionName());
+            func.Children.Add(match(Token_Class.left_parenthesis));
+            func.Children.Add(Parameter_List());
+            func.Children.Add(match(Token_Class.right_parenthesis));
+            return func;
+
+        }
+
+         Node Parameter_List()
+        {
+            Node paramList = new Node("Parameter_List");
+            if (TokenStream[InputPointer].token_type == Token_Class.right_parenthesis)
+                return paramList;
+
+            paramList.Children.Add(Parameter());
+            paramList.Children.Add(Parameter_Tail());
+            return paramList;
+        }
+
+         Node Parameter_Tail()
+        {
+            Node paramTail = new Node("Parameter_Tail");
+            if (TokenStream[InputPointer].token_type == Token_Class.Comma)
+            {
+
+                paramTail.Children.Add(match(Token_Class.Comma));
+                paramTail.Children.Add(Parameter());
+                paramTail.Children.Add(Parameter_Tail());
+            }
+            
+
+            return paramTail;
+        }
+
+
+        //rule 28 : function body
+        Node Function_Body()
+        {
+            Node funcBody = new Node("Function_Body");
+            funcBody.Children.Add(match(Token_Class.openBrac));
+            funcBody.Children.Add(Block());
+            funcBody.Children.Add(return_opt());
+            funcBody.Children.Add(match(Token_Class.closeBrac));
+            return funcBody;
+        }
+
+        Node return_opt()
+        {
+            Node r = new Node("Return_Opt");
+            if(InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.Return)
+            {
+                r.Children.Add(Read_Statement());
+            }
+
+            return r;
+        }
+
+
+        //29 Function statement
+        Node Function_statement()
+        {
+            Node fstmt = new Node("Function_statement");
+            fstmt.Children.Add(Function_Declaration());
+            fstmt.Children.Add(Function_Body());
+            return fstmt;
+        }
+
+        //rule 30: main
+        Node Main_Function()
+        {
+            Node main = new Node("Main");
+            main.Children.Add(Datatype());
+            main.Children.Add(match(Token_Class.Main));
+            main.Children.Add(match(Token_Class.left_parenthesis));
+            main.Children.Add(match(Token_Class.right_parenthesis));
+            main.Children.Add(Function_Body());
+
+            return main;
+
+
+        }
+
+        
+
+
 
         // Implement your logic here
         public Node match(Token_Class ExpectedToken)

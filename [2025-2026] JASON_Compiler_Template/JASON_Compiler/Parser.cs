@@ -47,11 +47,17 @@ namespace JASON_Compiler
         {
             Node program = new Node("Program");
 
-            program.Children.Add(Function_list());
-            program.Children.Add(Main_Function());
+            if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.Int && TokenStream[InputPointer + 1].token_type == Token_Class.Main)
+            {
+                program.Children.Add(Function_list());
+                program.Children.Add(Main_Function());
+            }
+            else
+            {
+                program.Children.Add(Block());
+            }
 
-            MessageBox.Show("Success");
-            return program; ;
+            return program; 
         }
 
         Node Function_list()

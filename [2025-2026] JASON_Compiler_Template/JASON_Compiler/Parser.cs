@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 namespace JASON_Compiler
 {
     // menna zakaria IMPLEMENTATION - Rules: 1, 2, 4, 8, 12, 17
@@ -425,6 +426,12 @@ namespace JASON_Compiler
             }
             return expression;
         }
+
+        private void printError(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         // Rule 11: assign statement
         public Node Assign_stmt()  
         {
@@ -620,6 +627,11 @@ namespace JASON_Compiler
 
         }
 
+        private Node Condition_Op()
+        {
+            throw new NotImplementedException();
+        }
+
         // Rule 19: Boolean Operator
         Node Boolean_Operator()
         {
@@ -652,6 +664,88 @@ namespace JASON_Compiler
             return currentToken == Token_Class.AndOp ||
                    currentToken == Token_Class.OrOp;
         }
+        // Rule 20:Condition Statement 
+        Node ConditionStatement()
+        {
+            Node cond = new Node("ConditionStatement");
+            cond.Children.Add(Condition());
+            cond.Children.Add(ConditionTail());
+            return cond;
+        }
+        Node ConditionTail()
+        {
+            Node tail = new Node("ConditionTail");
+            if (IsBooleanOperator())
+            {
+                tail.Children.Add(Boolean_Operator());
+                tail.Children.Add(Condition());
+                tail.Children.Add(ConditionTail());
+            
+            }
+
+            return tail;
+
+        }
+        // Rule 21: If Statement
+        Node IfStatement()
+        {
+            Node ifnode = new Node("IfStatement");
+            ifnode.Children.Add(match(Token_Class.If));
+            ifnode.Children.Add(ConditionStatement());
+            ifnode.Children.Add(match(Token_Class.Then));
+            ifnode.Children.Add(Block());
+            ifnode.Children.Add(IfTail());
+            ifnode.Children.Add(match(Token_Class.End));
+            return ifnode;
+
+        }
+        Node IfTail()
+        {
+            Node tail = new Node("IfTail");
+            if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.ElseIf)
+            {
+                tail.Children.Add(ElseIfStatement());
+                tail.Children.Add(IfTail());
+            }
+            else if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.Else)
+            {
+                tail.Children.Add(ElseStatement());
+            }
+            return tail;
+
+        }
+        // Rule 22: Else If Statement
+        Node ElseIfStatement() 
+        {
+            Node elseifnode = new Node("ElseIfStatement");
+            elseifnode.Children.Add(match(Token_Class.ElseIf));
+            elseifnode.Children.Add(ConditionStatement());
+            elseifnode.Children.Add(match(Token_Class.Then));
+            elseifnode.Children.Add(Block());
+            return elseifnode;
+        }
+        //Rule 23 :Else Statememnt
+        Node ElseStatement() 
+        {
+            Node elsenode = new Node("ElseStatement");
+            elsenode.Children.Add(match(Token_Class.Else));
+            elsenode.Children.Add(Block());
+            return elsenode;
+        }
+        // Rule 24 Repeat Statement
+        Node RepeatStatement()
+        {
+            Node rep = new Node("RepeatStatement");
+            rep.Children.Add(match(Token_Class.Repeat));
+            rep.Children.Add(Block());
+            rep.Children.Add(match(Token_Class.Until));
+            rep.Children.Add(ConditionStatement());
+            return rep;
+
+
+
+        }
+         
 
         // Rule 25: Function Name
         Node FunctionName()

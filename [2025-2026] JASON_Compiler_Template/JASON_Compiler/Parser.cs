@@ -57,6 +57,10 @@ namespace JASON_Compiler
         Node Function_list()
         {
             Node list = new Node("Function_List");
+
+            if (InputPointer >= TokenStream.Count)
+                return list;
+
             if (TokenStream[InputPointer].token_type == Token_Class.Main)
                 return list;
 
@@ -82,6 +86,8 @@ namespace JASON_Compiler
         Node Block()
         {
             Node block = new Node("block");
+            if (InputPointer >= TokenStream.Count)
+                return block;
             // write your code here to match statements
 
             //block.Children.Add(match(Token_Class.Begin));
@@ -94,6 +100,7 @@ namespace JASON_Compiler
         Node Statements()
         {
             Node s =new Node("Statements");
+
             if (InputPointer >= TokenStream.Count || TokenStream[InputPointer].token_type == Token_Class.End || TokenStream[InputPointer].token_type == Token_Class.ElseIf  || TokenStream[InputPointer].token_type == Token_Class.Else ||
                 TokenStream[InputPointer].token_type == Token_Class.Until)
             {
@@ -108,6 +115,7 @@ namespace JASON_Compiler
         Node Statement()
         {
             Node s = new Node("Statement");
+
             if (InputPointer >= TokenStream.Count)
                 return s;
 
@@ -344,7 +352,9 @@ namespace JASON_Compiler
         {
             Node argu = new Node("Argument_List");
 
-            
+            if (InputPointer >= TokenStream.Count)
+                return argu;
+
             if (TokenStream[InputPointer].token_type == Token_Class.right_parenthesis)
                 return argu;
 
@@ -358,6 +368,9 @@ namespace JASON_Compiler
         Node Argument_Tail()
         {
             Node tail = new Node("Argument_Tail");
+
+            if (InputPointer >= TokenStream.Count)
+                return tail;
 
             if (TokenStream[InputPointer].token_type == Token_Class.Comma)
             {
@@ -504,7 +517,8 @@ namespace JASON_Compiler
         public Node Expression()  //Expression → string | Term | Equation 
         {
             Node expression = new Node("Expression");
-
+            if (InputPointer >= TokenStream.Count)
+                return expression;
             if (InputPointer < TokenStream.Count)
             {
                 bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
@@ -554,7 +568,8 @@ namespace JASON_Compiler
         public Node Assign_stmt()  
         {
             Node ass_stmt = new Node("Assigment stmt");
-
+            if (InputPointer >= TokenStream.Count)
+                return ass_stmt;
             ass_stmt.Children.Add(match(Token_Class.Identifier));
             ass_stmt.Children.Add(match(Token_Class.AssignmentOp));
             ass_stmt.Children.Add(Expression());
@@ -612,6 +627,9 @@ namespace JASON_Compiler
         Node Identifier_List_Tail()
         {
             Node tail = new Node("Identifier_List_Tail");
+
+            if (InputPointer >= TokenStream.Count)
+                return tail;
 
             if (TokenStream[InputPointer].token_type == Token_Class.Comma)
             {
@@ -738,6 +756,7 @@ namespace JASON_Compiler
         public Node Condition() 
         {
             Node cond = new Node("Condition");
+
             cond.Children.Add(match(Token_Class.Identifier));
             cond.Children.Add(Condition_Op());
             cond.Children.Add(Term());
@@ -786,6 +805,10 @@ namespace JASON_Compiler
         Node ConditionStatement()
         {
             Node cond = new Node("ConditionStatement");
+            
+            if (InputPointer >= TokenStream.Count)
+                return cond;
+
             cond.Children.Add(Condition());
             cond.Children.Add(ConditionTail());
             return cond;
@@ -793,6 +816,10 @@ namespace JASON_Compiler
         Node ConditionTail()
         {
             Node tail = new Node("ConditionTail");
+
+            if (InputPointer >= TokenStream.Count)
+                return tail;
+
             if (IsBooleanOperator())
             {
                 tail.Children.Add(Boolean_Operator());
@@ -820,6 +847,8 @@ namespace JASON_Compiler
         Node IfTail()
         {
             Node tail = new Node("IfTail");
+            if (InputPointer >= TokenStream.Count)
+                return tail;
             if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.ElseIf)
             {
                 tail.Children.Add(ElseIfStatement());
@@ -854,6 +883,8 @@ namespace JASON_Compiler
         Node RepeatStatement()
         {
             Node rep = new Node("RepeatStatement");
+            if (InputPointer >= TokenStream.Count)
+                return rep;
             rep.Children.Add(match(Token_Class.Repeat));
             rep.Children.Add(Block());
             rep.Children.Add(match(Token_Class.Until));
@@ -921,6 +952,10 @@ namespace JASON_Compiler
          Node Parameter_List()
         {
             Node paramList = new Node("Parameter_List");
+
+            if (InputPointer >= TokenStream.Count)
+                return paramList;
+
             if (TokenStream[InputPointer].token_type == Token_Class.right_parenthesis)
                 return paramList;
 
@@ -932,6 +967,10 @@ namespace JASON_Compiler
          Node Parameter_Tail()
         {
             Node paramTail = new Node("Parameter_Tail");
+
+            if (InputPointer >= TokenStream.Count)
+                return paramTail;
+
             if (TokenStream[InputPointer].token_type == Token_Class.Comma)
             {
 
@@ -959,7 +998,10 @@ namespace JASON_Compiler
         Node return_opt()
         {
             Node r = new Node("Return_Opt");
-            if(InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.Return)
+            if (InputPointer >= TokenStream.Count)
+                return r;
+
+            if (InputPointer < TokenStream.Count && TokenStream[InputPointer].token_type == Token_Class.Return)
             {
                 r.Children.Add(Read_Statement());
             }

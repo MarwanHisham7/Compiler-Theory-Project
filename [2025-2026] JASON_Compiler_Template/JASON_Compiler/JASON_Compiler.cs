@@ -17,6 +17,8 @@ namespace JASON_Compiler
         {
             //Scanner
             Jason_Scanner.StartScanning(SourceCode);
+            // Ensure TokenStream is assigned from Jason_Scanner.Tokens
+            TokenStream = new List<Token>(Jason_Scanner.Tokens);
             //Parser
             Jason_Parser.StartParsing(TokenStream);
             treeroot = Jason_Parser.root;

@@ -171,7 +171,7 @@ namespace JASON_Compiler
             int lookahead = InputPointer + 1;
 
             if (lookahead < TokenStream.Count &&
-                TokenStream[lookahead].token_type == Token_Class.EqualOp)
+                TokenStream[lookahead].token_type == Token_Class.ColonEqual)
             {
                 stmt.Children.Add(Assign_stmt());
                 stmt.Children.Add(match(Token_Class.Semicolon));
@@ -533,7 +533,7 @@ namespace JASON_Compiler
             if (InputPointer >= TokenStream.Count)
                 return ass_stmt;
             ass_stmt.Children.Add(match(Token_Class.Identifier));
-            ass_stmt.Children.Add(match(Token_Class.EqualOp));
+            ass_stmt.Children.Add(match(Token_Class.ColonEqual));
             ass_stmt.Children.Add(Expression());
             return ass_stmt;
         }
@@ -614,9 +614,9 @@ namespace JASON_Compiler
             if (InputPointer >= TokenStream.Count)
                 return opt;
 
-            if (TokenStream[InputPointer].token_type == Token_Class.EqualOp)
+            if (TokenStream[InputPointer].token_type == Token_Class.ColonEqual)
             {
-                opt.Children.Add(match(Token_Class.EqualOp));
+                opt.Children.Add(match(Token_Class.ColonEqual));
                 opt.Children.Add(Expression());
             }
 
@@ -1017,8 +1017,48 @@ namespace JASON_Compiler
             {
                 if (ExpectedToken == TokenStream[InputPointer].token_type)
                 {
+                    // include lexeme for terminal nodes to improve parse tree readability
+                    string lexemeInfo = "";
+                    try
+                    {
+                        var token = TokenStream[InputPointer];
+                        // Try properties first
+                        var lexemeProp = token.GetType().GetProperty("lexeme") ??
+                                         token.GetType().GetProperty("lex") ??
+                                         token.GetType().GetProperty("value");
+                        if (lexemeProp != null)
+                        {
+                            var lexemeValue = lexemeProp.GetValue(token);
+                            if (lexemeValue != null)
+                                lexemeInfo = lexemeValue.ToString();
+                        }
+                        // Fallback to fields if properties are not present
+                        if (string.IsNullOrEmpty(lexemeInfo))
+                        {
+                            var lexField = token.GetType().GetField("lexeme") ??
+                                           token.GetType().GetField("lex") ??
+                                           token.GetType().GetField("value");
+                            if (lexField != null)
+                            {
+                                var lexFieldValue = lexField.GetValue(token);
+                                if (lexFieldValue != null)
+                                    lexemeInfo = lexFieldValue.ToString();
+                            }
+                        }
+                    }
+                    catch { }
+
                     InputPointer++;
-                    Node newNode = new Node(ExpectedToken.ToString());
+                    string nodeName = ExpectedToken.ToString();
+                    // Show lexeme for identifiers, constants and strings in the tree
+                    if (!string.IsNullOrEmpty(lexemeInfo) &&
+                        (ExpectedToken == Token_Class.Identifier ||
+                         ExpectedToken == Token_Class.Constant ||
+                         ExpectedToken == Token_Class.String))
+                    {
+                        nodeName += $" ({lexemeInfo})";
+                    }
+                    Node newNode = new Node(nodeName);
                     return newNode;
                 }
                 else
@@ -1072,14 +1112,53 @@ namespace JASON_Compiler
         {
             if (root == null || root.Name == null)
                 return null;
+
+            // Skip empty structural/tail nodes to keep the tree clean
+            if (root.Children.Count == 0 &&
+               (root.Name == "Function_List" ||
+                root.Name == "Statements" ||
+                root.Name == "Parameter_List" ||
+                root.Name == "Parameter_Tail" ||
+                root.Name == "Identifier_Tail" ||
+                root.Name == "Return_Opt" ||
+                root.Name == "Assignment_Opt"))
+            {
+                return null;
+            }
+
+            // Special handling to flatten nested Statements so all appear as siblings
+            if (root.Name == "Statements")
+            {
+                TreeNode flat = new TreeNode("Statements");
+                foreach (Node child in root.Children)
+                {
+                    if (child == null)
+                        continue;
+                    TreeNode childTree = PrintTree(child);
+                    if (childTree == null)
+                        continue;
+                    // If the child is also a Statements node (after filtering), merge its children
+                    if (child.Name == "Statements")
+                    {
+                        foreach (TreeNode grand in childTree.Nodes)
+                            flat.Nodes.Add(grand);
+                    }
+                    else
+                    {
+                        flat.Nodes.Add(childTree);
+                    }
+                }
+                return flat.Nodes.Count == 0 ? null : flat;
+            }
+
             TreeNode tree = new TreeNode(root.Name);
-            if (root.Children.Count == 0)
-                return tree;
             foreach (Node child in root.Children)
             {
                 if (child == null)
                     continue;
-                tree.Nodes.Add(PrintTree(child));
+                TreeNode childTree = PrintTree(child);
+                if (childTree != null)
+                tree.Nodes.Add(childTree);
             }
             return tree;
         }

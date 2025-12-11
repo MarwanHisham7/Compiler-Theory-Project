@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +11,7 @@ public enum Token_Class
     Parameters, Procedure, Program, Read, Real, Set, Then, Until, While, Write,
     Semicolon, Comma, LParanthesis, RParanthesis, EqualOp, LessThanOp,
     GreaterThanOp, NotEqualOp, PlusOp, MinusOp, MultiplyOp, DivideOp,
-    Idenifier, Constant, Int, Float, String, Bool, AndOp, OrOp, And, Or, openBrac, closeBrac, Main, ColonEqual, Repeat, ElseIf, Return, Endl, Dot,
-    left_parenthesis,
-    right_parenthesis,
-    Number,
-    Identifier,
-    AssignmentOp
+    Identifier, Constant, Int, Float, String, Bool, AndOp, OrOp, And, Or, openBrac, closeBrac, Main, ColonEqual, Repeat, ElseIf, Return, Endl, Dot
 }
 namespace JASON_Compiler
 {
@@ -184,7 +179,7 @@ namespace JASON_Compiler
                     }
                     else if (isIdentifier(value))
                     {
-                        Token Tok = new Token { lex = value, token_type = Token_Class.Idenifier };
+                        Token Tok = new Token { lex = value, token_type = Token_Class.Identifier };
                         Tokens.Add(Tok);
                     }
                     else
@@ -416,7 +411,7 @@ namespace JASON_Compiler
 
                 else if (isIdentifier(Lex))
 
-                    Tok.token_type = Token_Class.Idenifier;
+                    Tok.token_type = Token_Class.Identifier;
 
                 else if (isConstant(Lex))
                 {

@@ -371,7 +371,15 @@ namespace JASON_Compiler
                 return term;
             }
 
-            if (TokenStream[InputPointer].token_type == Token_Class.Constant)
+            // Handle parentheses in terms
+            if (TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
+            {
+                term.Children.Add(match(Token_Class.LParanthesis));
+                term.Children.Add(Equation());
+                term.Children.Add(match(Token_Class.RParanthesis));
+                return term;
+            }
+            else if (TokenStream[InputPointer].token_type == Token_Class.Constant)
             {
                 term.Children.Add(match(Token_Class.Constant));
                 return term;
@@ -442,48 +450,31 @@ namespace JASON_Compiler
         }
 
         // Rule 9: Equation
+        // Rule 9: Equation
         Node Equation()
         {
             Node equation = new Node("Equation");
-            if (InputPointer < TokenStream.Count)
-            {
-                if (TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
-                {
-                    equation.Children.Add(match(Token_Class.LParanthesis));
-                    equation.Children.Add(Equation());
-                    equation.Children.Add(match(Token_Class.RParanthesis));
-                }
-                else
-                {
-                    equation.Children.Add(Term());
-                    equation.Children.Add(Equation_Tail());
-                }
-            }
+            equation.Children.Add(Term());
+            equation.Children.Add(Equation_Tail());
             return equation;
         }
 
         Node Equation_Tail()
         {
             Node equationTail = new Node("Equation_Tail");
+
+            if (InputPointer >= TokenStream.Count)
+                return equationTail;
+
             if (IsArithmeticOperator())
             {
                 equationTail.Children.Add(Arithmetic_Operator());
-                if (InputPointer < TokenStream.Count &&
-                    TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
-                {
-                    equationTail.Children.Add(match(Token_Class.LParanthesis));
-                    equationTail.Children.Add(Equation());
-                    equationTail.Children.Add(match(Token_Class.RParanthesis));
-                }
-                else
-                {
-                    equationTail.Children.Add(Term());
-                    equationTail.Children.Add(Equation_Tail());
-                }
+                equationTail.Children.Add(Term());
+                equationTail.Children.Add(Equation_Tail());
             }
+
             return equationTail;
         }
-
         // Rule 10: expression
         public Node Expression()
         {
@@ -503,21 +494,10 @@ namespace JASON_Compiler
                 return expression;
             }
 
-            if (ct == Token_Class.Constant || ct == Token_Class.Identifier)
+            // Handle expressions starting with parentheses or constants/identifiers
+            if (ct == Token_Class.LParanthesis || ct == Token_Class.Constant || ct == Token_Class.Identifier)
             {
-                // Look ahead for operator
-                int lookahead = InputPointer + 1;
-                if (lookahead < TokenStream.Count)
-                {
-                    Token_Class next = TokenStream[lookahead].token_type;
-                    if (next == Token_Class.PlusOp || next == Token_Class.MinusOp ||
-                        next == Token_Class.MultiplyOp || next == Token_Class.DivideOp)
-                    {
-                        expression.Children.Add(Equation());
-                        return expression;
-                    }
-                }
-                expression.Children.Add(Term());
+                expression.Children.Add(Equation());
                 return expression;
             }
 
